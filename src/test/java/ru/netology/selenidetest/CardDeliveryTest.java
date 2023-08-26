@@ -1,12 +1,12 @@
 package ru.netology.selenidetest;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
 import java.time.Duration;
 
-import static com.codeborne.selenide.CollectionCondition.texts;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 
@@ -17,7 +17,8 @@ public class CardDeliveryTest {
     @Test
     void positiveTest() {
         GenerateDay day = new GenerateDay();
-        String planningDate = day.generateDay(4);
+        int dayX = 4;
+        String planningDate = day.generateDay(dayX);
 
         open("http://localhost:9999");
 
@@ -41,7 +42,8 @@ public class CardDeliveryTest {
     @Test
     void changeDateTestBryansk() {
         GenerateDay day = new GenerateDay();
-        String planningDate = day.generateDay(7);
+        int dayX = 7;
+        String planningDate = day.generateDay(dayX);
 
 
         open("http://localhost:9999");
@@ -50,10 +52,12 @@ public class CardDeliveryTest {
         $("[data-test-id='city'] input").setValue("Бр");
         $$(".menu-item__control").find(exactText("Брянск")).click();
 
-        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);//очистка поля даты
-        $(".icon_name_calendar").click();
-        $("[data-test-id='date'] input").setValue(planningDate);//ввод даты(со смещением на +7 дня) с применением метода
 
+        $(".icon_name_calendar").click();
+        $(".calendar").click();
+        for (int i = 0; i < (dayX - 3); i++) {
+            Selenide.actions().sendKeys(Keys.ARROW_RIGHT).perform();
+        }
 
         $("[data-test-id='name'] input").setValue("Петров-Карпов Владимир");
         $("[data-test-id='phone'] input").setValue("+79012345678");
@@ -69,7 +73,8 @@ public class CardDeliveryTest {
     @Test
     void changeDateTestKazan() {
         GenerateDay day = new GenerateDay();
-        String planningDate = day.generateDay(13);
+        int dayX = 13;
+        String planningDate = day.generateDay(dayX);
 
 
         open("http://localhost:9999");
@@ -78,9 +83,11 @@ public class CardDeliveryTest {
         $("[data-test-id='city'] input").setValue("Ка");
         $$(".menu-item__control").find(exactText("Казань")).click();
 
-        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);//очистка поля даты
         $(".icon_name_calendar").click();
-        $("[data-test-id='date'] input").setValue(planningDate);//ввод даты(со смещением на +7 дня) с применением метода
+        $(".calendar").click();
+        for (int i = 0; i < (dayX - 3); i++) {
+            Selenide.actions().sendKeys(Keys.ARROW_RIGHT).perform();
+        }
 
 
         $("[data-test-id='name'] input").setValue("Петров-Карпов Владимир");
